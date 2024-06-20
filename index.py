@@ -39,8 +39,6 @@ def function1(coordinatex, coordinatey):
         print("Try again!")
         return False
 
-
-
 o = 0
 
 while o < 10:

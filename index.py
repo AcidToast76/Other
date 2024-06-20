@@ -1,54 +1,42 @@
-from random import *   # Importing the random module
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.health = 100
+        self.attack_power = 10
 
-x = []
-z = 0
+    def attack(self, enemy):
+        enemy.health -= self.attack_power
+        print(f"{self.name} attacks {enem4y.name}!")
 
-for d1 in range(8):
-    x.append([])
-    for d2 in range(8):
-        x[d1].append("-")
+class Enemy:
+    def __init__(self, name, health, attack_power):
+        self.name = name
+        self.health = health
+        self.attack_power = attack_power
 
-for d1 in range(8):
-    for d2 in range(8):
-        if z < 10:
-            x[randint(0, 7)][randint(0, 7)] = "T"
-            z += 1
-        
-for d1 in range(8):
-    for d2 in range(8):
-        print("-", end=" ")
-    print()
+    def attack(self, player):
+        player.health -= self.attack_power
+        print(f"{self.name} attacks {player.name}!")
 
-coordinatex = int(input("Enter the x coordinate: "))
-coordinatey = int(input("Enter the y coordinate: "))
+# Create player and enemy instances
+player_name = input("Enter player name: ")
+player = Player(player_name)
+enemy = Enemy("Enemy 1", 50, 5)
 
-def function1(coordinatex, coordinatey):
-
-    if coordinatex < 0 or coordinatex > 7 or coordinatey < 0 or coordinatey > 7 or coordinatex == "" or coordinatey == "":
-        print("Please enter a valid coordinate!")
-        coordinatex = int(input("Enter the x coordinate: "))
-        coordinatey = int(input("Enter the y coordinate: "))
-        return False
-    elif x[coordinatex][coordinatey] == "T":
-        p = 1
-        print("Congratulations! You have found", p, "tank(s)!")
-        p =+ 1
-        return True
+# Game loop
+while player.health > 0 and enemy.health > 0:
+    action = input("Enter 'a' to attack or 'q' to quit: ")
+    if action == 'a':
+        player.attack(enemy)
+        enemy.attack(player)
+    elif action == 'q':
+        print("Game over.")
+        break
     else:
-        print("Sorry, there is no tank at", coordinatex, coordinatey, "coordinates!")
-        print("Try again!")
-        return False
+        print("Invalid input. Try again.")
 
-o = 0
-
-while o < 10:
-    if function1(coordinatex, coordinatey) == True:
-        o = o
-        coordinatex = int(input("Enter the x coordinate: "))
-        coordinatey = int(input("Enter the y coordinate: "))
-    elif function1(coordinatex, coordinatey) == False and coordinatex >= 0 and coordinatex <= 7 and coordinatey >= 0 and coordinatey <= 7:
-        print("You have", 10 - o, "tries left.")
-        o += 1
-        coordinatex = int(input("Enter the x coordinate: "))
-        coordinatey = int(input("Enter the y coordinate: "))
-    
+# Determine the winner
+if player.health > 0:
+    print(f"{player.name} wins!")
+else:
+    print(f"{enemy.name} wins!")

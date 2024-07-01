@@ -1,57 +1,73 @@
 import tkinter as tk
+import random
 
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.health = 100
-        self.attack_power = 10
-
-    def attack(self, enemy):
-        enemy.health -= self.attack_power
-        print(f"{self.name} attacks {enemy.name}!")
-
-class Enemy:
-    def __init__(self, name, health, attack_power):
-        self.name = name
-        self.health = health
-        self.attack_power = attack_power
-
-    def attack(self, player):
-        player.health -= self.attack_power
-        print(f"{self.name} attacks {player.name}!")
-
-def update_health_labels():
-    player_health_label.config(text=f"Player Health: {player.health}")
-    enemy_health_label.config(text=f"Enemy Health: {enemy.health}")
-
-def attack():
-    player.attack(enemy)
-    enemy.attack(player)
-    update_health_labels()
-    if player.health <= 0:
-        result_label.config(text=f"{enemy.name} wins!")
-    elif enemy.health <= 0:
-        result_label.config(text=f"{player.name} wins!")
-
-# Create player and enemy instances
-player_name = input("Enter player name: ")
-player = Player(player_name)
-enemy = Enemy("Enemy 1", 50, 5)
-
-# Create GUI
+# Game window setup
 root = tk.Tk()
-root.title("Goofy Game")
+root.title("Space Invaders")
+canvas = tk.Canvas(root, width=600, height=600, bg="black")
+canvas.pack()
 
-player_health_label = tk.Label(root, text=f"Player Health: {player.health}")
-player_health_label.pack()
+# Player spaceship
+player = canvas.create_rectangle(275, 550, 325, 570, fill="blue")
 
-enemy_health_label = tk.Label(root, text=f"Enemy Health: {enemy.health}")
-enemy_health_label.pack()
+# Movement controls
+def move_left(event):
+    x, y, x2, y2 = canvas.coords(player)
+    if x > 0:
+        canvas.move(player, -20, 0)
 
-attack_button = tk.Button(root, text="Attack", command=attack)
-attack_button.pack()
+def move_right(event):
+    x, y, x2, y2 = canvas.coords(player)
+    if x2 < 600:
+        canvas.move(player, 20, 0)
 
-result_label = tk.Label(root, text="")
-result_label.pack()
+root.bind("<Left>", move_left)
+root.bind("<Right>", move_right)
+
+# Shooting mechanism
+def shoot(event):
+    x, y, x2, y2 = canvas.coords(player)
+    bullet = canvas.create_rectangle((x+x2)/2, y, (x+x2)/2 + 5, y-20, fill="yellow")
+    bullet_move(bullet)
+
+def bullet_move(bullet):
+    canvas.move(bullet, 0, -10)
+    if canvas.coords(bullet)[1] > 0:
+        root.after(100, lambda: bullet_move(bullet))
+    else:
+        canvas.delete(bullet)
+
+root.bind("<space>", shoot)
+
+# Aliens setup
+aliens = []
+def create_aliens():
+    for i in range(5):
+        for j in range(5):
+            alien = canvas.create_rectangle(50 + j*100, 30 + i*60, 100 + j*100, 80 + i*60, fill="red")
+            aliens.append(alien)
+
+create_aliens()
+
+# Game loop (simplified)
+def game_loop():
+    # Move aliens, check for collisions, etc. (to be implemented)
+    root.after(100, game_loop)
+
+game_loop()
 
 root.mainloop()
+
+# Next steps:
+# - Implement alien movement:
+#   - Move aliens to the right
+#   - When they reach the edge, move them down and change direction
+# - Implement collision detection:
+#   - Check if the bullet hits an alien
+#   - Check if an alien hits the player
+# - Implement game over conditions:
+#   - When an alien hits the player
+#   - When all aliens are destroyed
+# - Implement scoring:
+#   - Keep track of the score
+#   - Display the score on the screen

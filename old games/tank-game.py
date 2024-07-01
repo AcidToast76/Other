@@ -2,17 +2,17 @@ from random import *   # Importing the random module
 
 x = []
 z = 0
+class Board:
+    for d1 in range(8):
+        x.append([])
+        for d2 in range(8):
+            x[d1].append("-")
 
-for d1 in range(8):
-    x.append([])
-    for d2 in range(8):
-        x[d1].append("-")
-
-for d1 in range(8):
-    for d2 in range(8):
-        if z < 10:
-            x[randint(0, 7)][randint(0, 7)] = "T"
-            z += 1
+    for d1 in range(8):
+        for d2 in range(8):
+            if z < 10:
+                x[randint(0, 7)][randint(0, 7)] = "T"
+                z += 1
         
 for d1 in range(8):
     for d2 in range(8):
@@ -21,6 +21,7 @@ for d1 in range(8):
 
 coordinatex = int(input("Enter the x coordinate: "))
 coordinatey = int(input("Enter the y coordinate: "))
+
 
 def function1(coordinatex, coordinatey):
     if coordinatex < 0 or coordinatex > 7 or coordinatey < 0 or coordinatey > 7 or coordinatex == "" or coordinatey == "":
@@ -45,6 +46,5 @@ while o < 10:
     elif function1(coordinatex, coordinatey) == False:
         print("You have", 10 - o, "tries left.")
         o += 1
-        coordinatex = int(input("Enter the x coordinate: "))
-        coordinatey = int(input("Enter the y coordinate: "))
+        askfunction();
     
